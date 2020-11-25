@@ -33,8 +33,10 @@ class FieldArgsParser extends Parser
             this.finish();
 
             if (i + 1 >= this.text.content.length && !this.fieldParser.escaped) {
-                if (this.name !== '')
-                    this.text.addPart(this.fieldParser._getField());
+                if (this.name !== '') {
+                    this.fieldParser.finish();
+                    this.fieldParser.addField();
+                }
             }
 
             return 1;

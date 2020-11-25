@@ -89,11 +89,19 @@ class FieldParser extends Parser
         }
 
         if (this.regexp.test(c)) {
+            if (this.args !== null) {
+                if (this.name !== '') {
+                    this.addField();
+                    this.finish();
+                    return 0;
+                }
+            }
+
             this.name += c;
 
             if (i + 1 >= this.text.content.length && !this.escaped) {
                 if (this.name !== '') {
-                    this.text.addPart(this._getField());
+                    this.addField();
                     this.finish();
                 }
             }
@@ -112,27 +120,27 @@ class FieldParser extends Parser
             if (c !== '}')
                 this.error('Wrong field name format.', line);
 
-            if (this.parentParser_Type === 'text') {
-                this.text.addPart(this._getField());
-            } else if (this.parentParser_Type === 'attrib') {
-                this.parentParser.attribParser.tagParser
-                        .attribs[this.parentParser.attribParser.name].push(
-                        this._getField());
-            }
+            this.addField();
 
             this.finish();
             return 1;
         }
 
+        this.addField();
+
+        this.finish();
+        return 0;
+    }
+
+    addField()
+    {
         if (this.parentParser_Type === 'text') {
             this.text.addPart(this._getField());
         } else if (this.parentParser_Type === 'attrib') {
             this.parentParser.attribParser.tagParser
-                .attribs[this.parentParser.attribParser.name].push(this._getField());
+                    .attribs[this.parentParser.attribParser.name].push(
+                    this._getField());
         }
-
-        this.finish();
-        return 0;
     }
 
 
