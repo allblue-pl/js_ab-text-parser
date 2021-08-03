@@ -12,8 +12,14 @@ class ExprParser extends Parser
     static IsStart(content, i)
     {
         if (content.length > i + 1) {
-            if (content[i] === '?' && content[i + 1] === '(')
-                return 2;
+            if (content[i] !== '?')
+                return 0;
+            if (content[i + 1] !== '(')
+                return 0;
+            if (content[i - 1] === '\\')
+                return 0;
+
+            return 2;
         }
 
         return 0;
