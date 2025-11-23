@@ -9,9 +9,10 @@ const
 class Text
 {
 
-    constructor(content)
+    constructor(content, ignoreLeadingSpaces = true)
     {
         this.content = content;
+        this.ignoreLeadingSpaces = ignoreLeadingSpaces;
         this.parsers = [
             new TextParser(this),
         ];

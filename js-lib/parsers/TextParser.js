@@ -48,9 +48,14 @@ class TextParser extends Parser
         // }
 
         if (this.value === null) {
-            if (c === ' ' || c === "\r" || c === "\n")
+            if (c === "\r" || c === "\n")
                 return 1;
-
+            if (this.text.ignoreLeadingSpaces) {
+                if (c === ' ') {
+                    return 1;
+                }
+            }
+            
             this.value = '';
         }
 

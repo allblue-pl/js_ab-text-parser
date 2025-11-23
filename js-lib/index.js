@@ -8,13 +8,13 @@ class abTextParser_Class
 
     }
 
-    parse(text)
+    parse(text, ignoreLeadingSpaces = true)
     {
         let
             Text = require('./Text')
         ;
 
-        let t = new Text(text);
+        let t = new Text(text, ignoreLeadingSpaces);
 
         return t.parts;
     }
