@@ -1,33 +1,27 @@
-'use strict';
+import js0 from "js0";
 
-const
-    js0 = require('js0'),
+import Parser from "../Parser";
 
-    Parser = require('../Parser'),
+import ExprParser from "./ExprParser";
+import FieldParser from "./FieldParser";
 
-    ExprParser = require('./ExprParser'),
-    FieldParser = require('./FieldParser')
-;
+import Text from "../Text";
 
-class TextParser extends Parser
-{
-
+export default class TextParser extends Parser {
     static IsStart(c, i, line) {
         return c === '<' ? 1 : 0;
     }
 
 
-    constructor(text)
-    {
-        js0.args(arguments, require('../Text'));
+    constructor(text) {
+        js0.args(arguments, Text);
         super(text);
 
         this.value = null;
         // this._htmlEntities = new htmlEntities.AllHtmlEntities();
     }
 
-    __read(c, i, line)
-    {
+    __read(c, i, line) {
         let step;
 
         // step = TagParser.IsStart(c);
@@ -92,10 +86,8 @@ class TextParser extends Parser
     }
 
 
-    _decodeHtml(str)
-    {
+    _decodeHtml(str) {
         // return this._htmlEntities.decode(str);
     }
 
 }
-module.exports = TextParser;

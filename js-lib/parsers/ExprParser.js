@@ -1,14 +1,10 @@
-'use strict';
+import js0 from "js0";
+import Parser from "../Parser";
+import Text from "../Text";
+import Parser from "../Parser";
+import TextParser from "./TextParser";
 
-const
-    js0 = require('js0'),
-
-    Parser = require('../Parser')
-;
-
-class ExprParser extends Parser
-{
-
+export default class ExprParser extends Parser {
     static IsStart(content, i)
     {
         if (content.length > i + 1) {
@@ -26,17 +22,16 @@ class ExprParser extends Parser
     }
 
 
-    constructor(text, parser)
-    {
-        js0.args(arguments, require('../Text'), require('../Parser'));
+    constructor(text, parser) {
+        js0.args(arguments, Text, Parser);
         super(text);
 
         this.parentParser = parser;
         this.parentParser_Type = null;
-        if (js0.type(parser, require('./TextParser')))
+        if (js0.type(parser, TextParser))
             this.parentParser_Type = 'text';
-        else if (js0.type(parser, require('./AttribValueParser')))
-            this.parentParser_Type = 'attrib'; 
+        // else if (js0.type(parser, AttribValueParser))
+        //     this.parentParser_Type = 'attrib'; 
 
         js0.assert(this.parentParser_Type !== null, 
                 `Invalid parser type: ${parser.constructor.name}.`);
@@ -51,8 +46,7 @@ class ExprParser extends Parser
         this.value = '';
     }
 
-    __read(c, i, line)
-    {
+    __read(c, i, line) {
         let step;
 
         if (this.quoteOpened === null) {
@@ -85,10 +79,10 @@ class ExprParser extends Parser
 
                 if (this.parentParser_Type === 'text') {
                     this.text.addPart('?(' + this.value + ')');
-                } else if (this.parentParser_Type === 'attrib') {
-                    this.parentParser.attribParser.tagParser
-                            .attribs[this.parentParser.attribParser.name].push(
-                            '?(' + this.value + ')');
+                // } else if (this.parentParser_Type === 'attrib') {
+                //     this.parentParser.attribParser.tagParser
+                //             .attribs[this.parentParser.attribParser.name].push(
+                //             '?(' + this.value + ')');
                 }
                 this.finish();
                 return 1;
@@ -98,6 +92,4 @@ class ExprParser extends Parser
         this.value +=c;
         return 1;
     }
-
 }
-module.exports = ExprParser;

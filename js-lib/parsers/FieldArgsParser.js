@@ -1,22 +1,17 @@
-'use strict';
+import js0 from "js0";
+import Parser from "../Parser";
+import Text from "../Text";
+import FieldParser from "./FieldParser";
 
-const
-    js0 = require('js0'),
-
-    Parser = require('../Parser')
-;
-
-class FieldArgsParser extends Parser
-{
+export default class FieldArgsParser extends Parser {
 
     static IsStart(c, i, line) {
         return c === '(' ? 1 : 0;
     }
 
 
-    constructor(text, fieldParser)
-    {
-        js0.args(arguments, require('../Text'), require('./FieldParser'));
+    constructor(text, fieldParser) {
+        js0.args(arguments, Text, FieldParser);
         super(text);
 
         this.fieldParser = fieldParser;
@@ -24,8 +19,7 @@ class FieldArgsParser extends Parser
         this.args = '';
     }
 
-    __read(c, i, line)
-    {
+    __read(c, i, line) {
         let step;
 
         if (c === ')') {
@@ -45,6 +39,4 @@ class FieldArgsParser extends Parser
         this.args +=c;
         return 1;
     }
-
 }
-module.exports = FieldArgsParser;

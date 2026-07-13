@@ -1,16 +1,13 @@
-'use strict';
+import js0 from "js0";
+import Parser from "../Parser";
+import FieldArgsParser from "./FieldArgsParser";
+import TextParser from "./TextParser";
+import Text from "../Text";
+import Parser from "../Parser";
 
-const
-    js0 = require('js0'),
+// import AttribValueParser from "./AttributeValueParser";
 
-    Parser = require('../Parser'),
-
-    FieldArgsParser = require('./FieldArgsParser')
-;
-
-class FieldParser extends Parser
-{
-
+export default class FieldParser extends Parser {
     static IsStart(document, c, i, line) {
         if (c !== '$')
             return 0;
@@ -24,17 +21,16 @@ class FieldParser extends Parser
     }
 
 
-    constructor(text, parser)
-    {
-        js0.args(arguments, require('../Text'), require('../Parser'));
+    constructor(text, parser) {
+        js0.args(arguments, Text, Parser);
         super(text);
 
         this.parentParser = parser;
         this.parentParser_Type = null;
-        if (js0.type(parser, require('./TextParser')))
+        if (js0.type(parser, TextParser))
             this.parentParser_Type = 'text';
-        else if (js0.type(parser, require('./AttribValueParser')))
-            this.parentParser_Type = 'attrib'; 
+        // else if (js0.type(parser, AttribValueParser))
+        //     this.parentParser_Type = 'attrib'; 
 
         js0.assert(this.parentParser_Type !== null, 
                 `Invalid parser type: ${parser.constructor.name}.`);
@@ -48,8 +44,7 @@ class FieldParser extends Parser
         this.regexp = /[a-zA-Z0-9_.]/;
     }
 
-    __read(c, i, line)
-    {
+    __read(c, i, line) {
         let step;
 
         if (this.name === '' && !this.escaped) {
@@ -132,24 +127,21 @@ class FieldParser extends Parser
         return 0;
     }
 
-    addField()
-    {
+    addField() {
         if (this.parentParser_Type === 'text') {
             this.text.addPart(this._getField());
-        } else if (this.parentParser_Type === 'attrib') {
-            this.parentParser.attribParser.tagParser
-                    .attribs[this.parentParser.attribParser.name].push(
-                    this._getField());
+        // } else if (this.parentParser_Type === 'attrib') {
+        //     this.parentParser.attribParser.tagParser
+        //             .attribs[this.parentParser.attribParser.name].push(
+        //             this._getField());
         }
     }
 
 
-    _getField()
-    {
+    _getField() {
         return '$' + (this.escaped ? '{' : '') + this.name + 
                 (this.args === null ? '' : '(' + this.args + ')') + 
                 (this.escaped ? '}' : '');
     }
 
 }
-module.exports = FieldParser;

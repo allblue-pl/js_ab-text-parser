@@ -1,16 +1,9 @@
-'use strict';
+import js0 from "js0";
+import TextParser from "./parsers/TextParser";
+import Parser from "./Parser";
 
-const
-    js0 = require('js0'),
-
-    TextParser = require('./parsers/TextParser')
-;
-
-class Text
-{
-
-    constructor(content, ignoreLeadingSpaces = true)
-    {
+export default class Text {
+    constructor(content, ignoreLeadingSpaces = true) {
         this.content = content;
         this.ignoreLeadingSpaces = ignoreLeadingSpaces;
         this.parsers = [
@@ -23,27 +16,23 @@ class Text
             this.parse();
     }
 
-    addPart(part)
-    {
+    addPart(part) {
         js0.args(arguments, 'string');
 
         this.parts.push(part);
     }
 
-    error(message, line)
-    {
+    error(message, line) {
         throw new Error('Line: ' + line + '. ' + message);
     }
 
-    finishParser(parser)
-    {
-        js0.args(arguments, require('./Parser'));
+    finishParser(parser) {
+        js0.args(arguments, Parser);
 
         this.parsers.pop();
     }
 
-    parse()
-    {
+    parse() {
         let i = 0;
         let line = 1;
         while(true) {
@@ -68,12 +57,10 @@ class Text
         //     throw new Error(`Part '${this.parts[this.elems.length - 1].name}' not closed.`);
     }
 
-    startParser(parser)
-    {
-        js0.args(arguments, require('./Parser'));
+    startParser(parser) {
+        js0.args(arguments, Parser);
 
         this.parsers.push(parser);
     }
 
 }
-module.exports = Text;
